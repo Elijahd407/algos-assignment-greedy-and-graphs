@@ -1,7 +1,7 @@
 /**
  * Physics Experiment
- * Author: Your Name and Carolyn Yao
- * Does this compile or finish running within 5 seconds? Y/N
+ * Author: Elijah Desrosier and Carolyn Yao
+ * Does this compile or finish running within 5 seconds? Y
  */
 
 /**
@@ -35,11 +35,33 @@ public class PhysicsExperiment {
   ) {
     // Your scheduleTable is initialized as all 0's so far. Your code will put 1's
     // in the table in the right places based on the return description
-    int[][] scheduleTable = new int[numStudents + 1][numSteps + 1];
+	  int[][] scheduleTable = new int[numStudents + 1][numSteps + 1];
 
-    // Your code goes here
+	// Your code goes here
+		int current=0;
+		while(current <numSteps){
+			int bestChoice=0;
+			int maxConsecutiveStreak=0;
 
-    return scheduleTable;
+			for(int studentNum=0;studentNum<numStudents+1;studentNum++){
+				int a=current;
+				int currentSteps=0;
+
+				while(a+1<numSteps+1&&signUpTable[studentNum][a+1]==1){
+					currentSteps++;
+					a++;
+				}
+				if(currentSteps>maxConsecutiveStreak){
+					maxConsecutiveStreak=currentSteps;
+					bestChoice=studentNum;
+				}
+			}
+			for(int i=0;i<maxConsecutiveStreak;i++){
+				scheduleTable[bestChoice][current +1]=1;
+				current++;
+			}
+		}
+      return scheduleTable;
   }
 
   /**
