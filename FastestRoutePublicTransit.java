@@ -1,7 +1,7 @@
 /**
  * Public Transit
- * Author: Your Name and Carolyn Yao
- * Does this compile? Y/N
+ * Author: Elijah Desrosier and Carolyn Yao
+ * Does this compile? Y
  */
 
 /**
@@ -34,6 +34,50 @@ public class FastestRoutePublicTransit {
   ) {
     // Your code along with comments here. Feel free to borrow code from any
     // of the existing method. You can also make new helper methods.
+	  int[] timeTable = new int[lengths[0].length];
+	  Boolean[] accounted = new Boolean[lengths[0].length];
+	  int timer;
+	  int verticeCount = lengths[0].length;
+	  
+	  for (int i = 0; i < lengths[0].length; i++) {
+			timeTable[i] = Integer.MAX_VALUE;
+			accounted[i] = false;
+		}
+	    timeTable[S] = startTime;
+
+	    for (int i=0; i<verticeCount-1; i++){
+	      int smallestVertex = findNextToProcess(timeTable, accounted);
+	      accounted[smallestVertex] = true;
+	      int possibleValue = 0;
+
+	      for (int j=0; j<verticeCount; j++){
+	        if (timeTable[smallestVertex] > first[smallestVertex][j] && freq[smallestVertex][j] == 0){
+	          possibleValue = timeTable[smallestVertex] + lengths[smallestVertex][j];
+
+	          if (freq[smallestVertex][j] != 0){
+	            int marker = timeTable[smallestVertex] - first[smallestVertex][j];
+	            int bound = marker % freq[smallestVertex][j];
+	            possibleValue = bound;
+	            if (possibleValue == 0){
+	              possibleValue = timeTable[smallestVertex] + lengths[smallestVertex][j];
+	            } else {
+	              possibleValue = timeTable[smallestVertex] + lengths[smallestVertex][j] + freq[smallestVertex][j] - possibleValue;
+	            }
+	          }
+	        } else {
+	          possibleValue = timeTable[smallestVertex] + lengths[smallestVertex][j] + first[smallestVertex][j];
+	        }
+
+	        if (!accounted[j] && lengths[smallestVertex][j] != 0 && timeTable[smallestVertex] != Integer.MAX_VALUE && possibleValue < timeTable[j]){
+	          timeTable[j] = possibleValue;
+	        }
+
+	      }
+
+	    }
+
+	    int ShortestTime = timeTable[T] - startTime;
+	    return ShortestTime;
     return 0;
   }
 
@@ -125,5 +169,6 @@ public class FastestRoutePublicTransit {
     t.shortestTime(lengthTimeGraph, 0);
 
     // You can create a test case for your implemented method for extra credit below
-  }
+ 
+}
 }
